@@ -36,7 +36,7 @@ If you want to avoit extracting the file from the jar every time you
 want to check the dependency tree of a jar, you may want to include
 this code in your project:
 
-
+```clojure
 (ns resource
   (:require [clojure.java.io :as io])
   (:gen-class :main))
@@ -48,6 +48,7 @@ this code in your project:
         (do (println (str "\n>> " r ":"))
             (println (slurp r')))
         (println "Missing" r)))))
+```
 
 and then from the command line you can simply
 
