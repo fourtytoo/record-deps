@@ -26,7 +26,7 @@ Check that it works
 
 Where and what type of file is saved depends on the project map keys
 `:record-deps-edn` and `:record-deps-txt`.  The former specifies the
-pathname of the EDN data and the latter the pathname of the txt
+pathname of the EDN data and the latter the pathname of the textual
 description.  Whichever you are more comfortable with.
 
 
