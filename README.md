@@ -15,8 +15,12 @@ or something along the lines.  See below.
 
 ## Install
 
+Clone and install locally:
+
+```console
    $ git clone https://github.com/fourtytoo/record-deps.git
    $ lein install
+```
 
 ## Usage
 
