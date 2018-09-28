@@ -26,8 +26,10 @@ your project.clj.  Add also something like `:record-deps-txt
 
 Check that it works
 
+```console
     $ lein record-deps
     $ cat resources/deps.txt
+```
 
 Where and what type of file is saved depends on the project map keys
 `:record-deps-edn` and `:record-deps-txt`.  The former specifies the
