@@ -10,14 +10,19 @@ like this
 
    $ jar xf path-to-your.jar deps.txt
 
-or something along the lines.
+or something along the lines.  See below.
 
+
+## Install
+
+   $ git clone https://github.com/fourtytoo/record-deps.git
+   $ lein install
 
 ## Usage
 
 Put `[record-deps "0.1.0-SNAPSHOT"]` into the `:plugins` vector of
 your project.clj.  Add also something like `:record-deps-txt
-"resources/deps.txt"` in your project.
+"resources/deps.txt"` to your project map.
 
 Check that it works
 
