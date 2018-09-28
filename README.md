@@ -8,7 +8,10 @@ dependency tree of the jar file as with `lein deps :tree` but without
 the project source tree.  You will have to extract the dependencies
 like this
 
+
+```console
    $ jar xf path-to-your.jar deps.txt
+```
 
 or something along the lines.  See below.
 
@@ -63,7 +66,9 @@ this code in your project:
 
 and then from the command line you can simply
 
+```console
    $ java -cp target/my-program-standalone.jar resource deps.edn
+```
 
 ## License
 
