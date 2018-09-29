@@ -50,7 +50,15 @@ description.  Whichever you are more comfortable with.  If you don't
 specify anything at all the default is to write a text file
 `resources/deps.txt`.
 
-Usually you would get something like this
+Add `record-deps` to your `:prep-tasks` like this:
+
+```clojure
+:prep-tasks ["record-deps" "javac" "compile"]
+```
+
+This creates the dependencies file before performing the compilation.
+
+Test it
 
 ```console
  $ lein uberjar
