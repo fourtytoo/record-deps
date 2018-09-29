@@ -4,8 +4,9 @@ A Leiningen plugin that lets you automatically include the dependency
 tree of your project into the final (uber)jar.
 
 On every build (either jar or uberjar), this plugin writes the
-dependency tree to a file.  That implies that the list of dependencies
-will be included in the jar file as a Java resource.
+dependency tree to a file in the directory `resources`.  That implies
+that the list of dependencies will be included in the jar file as a
+Java resource.
 
 Later you can check the dependencies that formed the final jar as with
 `lein deps :tree` but without the project.  You can, for instance,
@@ -26,6 +27,7 @@ Clone and install locally:
  $ git clone https://github.com/fourtytoo/record-deps.git
  $ lein install
 ```
+
 
 ## Usage
 
