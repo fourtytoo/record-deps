@@ -1,16 +1,19 @@
 # record-deps
 
-A Leiningen plugin to write the project dependency tree to a file.
+A Leiningen plugin that lets you include automatically the dependency
+tree of your project into the final uberjar.
 
-The intention is that the output file will be automatically included
-in the final (uber)jar as a resource.  Later you can check the
-dependency tree of the jar file as with `lein deps :tree` but without
-the project source tree.  You will have to extract the dependencies
-like this
+On every build of the jar or uberjar, this plugin writes the
+dependency tree to a file.  By default `resources/deps.txt`.
+That implies that the dependency tree will be automatically included
+in the jar file as a Java resource.
 
+Later you can check the dependency tree of the jar file as with `lein
+deps :tree` but without the project source tree.  You can extract the
+dependencies like this
 
 ```console
-   $ jar xf path-to-your.jar deps.txt
+ $ jar xf path-to-your.jar deps.txt
 ```
 
 or something along the lines.  See below.
@@ -21,21 +24,22 @@ or something along the lines.  See below.
 Clone and install locally:
 
 ```console
-   $ git clone https://github.com/fourtytoo/record-deps.git
-   $ lein install
+ $ git clone https://github.com/fourtytoo/record-deps.git
+ $ lein install
 ```
 
 ## Usage
 
-Put `[record-deps "0.1.0-SNAPSHOT"]` into the `:plugins` vector of
-your project.clj.  Add also something like `:record-deps-txt
-"resources/deps.txt"` to your project map.
+Put `[record-deps "0.1.1-SNAPSHOT"]` into the `:plugins` vector of
+your project.clj.  You can also add something like `:record-deps-txt
+"resources/project_dependencies"` to your project map, if you don't
+like the default.
 
 Check that it works
 
 ```console
-    $ lein record-deps
-    $ cat resources/deps.txt
+ $ lein record-deps
+ $ cat resources/deps.txt
 ```
 
 Where and what type of file is saved depends on the project map keys
@@ -46,9 +50,9 @@ description.  Whichever you are more comfortable with.
 
 ## Query
 
-If you want to avoit extracting the file from the jar every time you
-want to check the dependency tree of a jar, you may want to include
-this code in your project:
+If you want to avoid extracting the file from the jar every time you
+want to check the dependency tree, you may want to include this code
+in your project:
 
 ```clojure
 (ns resource
@@ -67,7 +71,7 @@ this code in your project:
 and then from the command line you can simply
 
 ```console
-   $ java -cp target/my-program-standalone.jar resource deps.edn
+ $ java -cp target/my-program-standalone.jar resource deps.edn
 ```
 
 ## License

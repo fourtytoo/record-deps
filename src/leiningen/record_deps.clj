@@ -4,7 +4,6 @@
             [leiningen.core.main :as lm]
             [leiningen.core.project :as lp]
             [leiningen.core.classpath :as lcp]
-            [clojure.pprint :as pp]
             [clojure.java.io :as io]
             [clojure.string :as s]))
 
@@ -20,20 +19,28 @@
   ([deps f]
    (walk-deps deps f 0)))
 
+(defmacro with-out [file fun]
+  `(with-open [out# (io/writer ~file)]
+     (binding [*out* out#]
+       (~fun))))
+
 (defn save-deps [project]
   (let [{:keys [record-deps-edn record-deps-txt]} project
         hierarchy (lcp/managed-dependency-hierarchy :dependencies
                                                     :managed-dependencies
-                                                    project)]
+                                                    project)
+        ;; by default write at least the text file
+        record-deps-txt (if (or record-deps-txt record-deps-edn)
+                          record-deps-txt
+                          (io/file "resources" "deps.txt"))]
     (when record-deps-txt
       (lm/info "Saving project dependencies in" record-deps-txt "as text.")
-      (with-open [out (io/writer record-deps-txt)]
-        (binding [*out* out]
-          (walk-deps hierarchy print-dep))))
+      (with-out record-deps-txt
+        (walk-deps hierarchy print-dep)))
     (when record-deps-edn
       (lm/info "Saving project dependencies in" record-deps-edn "as EDN data.")
-      (with-open [out (io/writer record-deps-edn)]
-        (pp/pprint hierarchy out)))))
+      (with-out record-deps-edn
+        (prn hierarchy)))))
 
 (defn record-deps
   "Write the dependency tree to a file.  Where and what type of file is
