@@ -34,11 +34,11 @@
                           record-deps-txt
                           (io/file "resources" "deps.txt"))]
     (when record-deps-txt
-      (lm/info "Saving project dependencies in" record-deps-txt "as text.")
+      (lm/info "Saving project dependencies in" (str record-deps-txt) "as text.")
       (with-out record-deps-txt
         (walk-deps hierarchy print-dep)))
     (when record-deps-edn
-      (lm/info "Saving project dependencies in" record-deps-edn "as EDN data.")
+      (lm/info "Saving project dependencies in" (str record-deps-edn) "as EDN data.")
       (with-out record-deps-edn
         (prn hierarchy)))))
 
