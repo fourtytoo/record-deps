@@ -1,16 +1,15 @@
 # record-deps
 
-A Leiningen plugin that lets you include automatically the dependency
-tree of your project into the final uberjar.
+A Leiningen plugin that lets you automatically include the dependency
+tree of your project into the final (uber)jar.
 
-On every build of the jar or uberjar, this plugin writes the
-dependency tree to a file.  By default `resources/deps.txt`.
-That implies that the dependency tree will be automatically included
-in the jar file as a Java resource.
+On every build (either jar or uberjar), this plugin writes the
+dependency tree to a file.  That implies that the list of dependencies
+will be included in the jar file as a Java resource.
 
-Later you can check the dependency tree of the jar file as with `lein
-deps :tree` but without the project source tree.  You can extract the
-dependencies like this
+Later you can check the dependencies that formed the final jar as with
+`lein deps :tree` but without the project.  You can, for instance,
+extract the dependencies like this
 
 ```console
  $ jar xf path-to-your.jar deps.txt
@@ -45,14 +44,27 @@ Check that it works
 Where and what type of file is saved depends on the project map keys
 `:record-deps-edn` and `:record-deps-txt`.  The former specifies the
 pathname of the EDN data and the latter the pathname of the textual
-description.  Whichever you are more comfortable with.
+description.  Whichever you are more comfortable with.  If you don't
+specify anything at all the default is to write a text file
+`resources/deps.txt`.
+
+Usually you would get something like this
+
+```console
+ $ lein uberjar
+ Saving project dependencies in resources/deps.txt as text.
+ Created /usr/home/your_account/some/project.dir/target/your_project-0.1.1-SNAPSHOT.jar
+ $ jar tf /usr/home/your_account/some/project.dir/target/your_project-0.1.0-SNAPSHOT.jar | fgrep deps.txt
+ deps.txt
+ $
+```
 
 
 ## Query
 
 If you want to avoid extracting the file from the jar every time you
-want to check the dependency tree, you may want to include this code
-in your project:
+want to check the dependencies of your jar, you may want to include
+this code in your project:
 
 ```clojure
 (ns resource
