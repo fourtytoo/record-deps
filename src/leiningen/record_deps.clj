@@ -19,10 +19,10 @@
   ([deps f]
    (walk-deps deps f 0)))
 
-(defmacro with-out [file fun]
+(defmacro with-out [file & body]
   `(with-open [out# (io/writer ~file)]
      (binding [*out* out#]
-       (~fun))))
+       ~@body)))
 
 (defn save-deps [project]
   (let [{:keys [record-deps-edn record-deps-txt]} project
