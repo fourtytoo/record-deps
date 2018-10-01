@@ -1,5 +1,7 @@
 # record-deps
 
+[![Clojars Project](https://img.shields.io/clojars/v/fourtytoo/record-deps.svg)](https://clojars.org/fourtytoo/record-deps)
+
 A Leiningen plugin that lets you automatically include the dependency
 tree of your project into the final (uber)jar.
 
