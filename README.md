@@ -31,10 +31,8 @@ Clone and install locally:
 
 ## Usage
 
-Put `[record-deps "0.1.1-SNAPSHOT"]` into the `:plugins` vector of
-your project.clj.  You can also add something like `:record-deps-txt
-"resources/project_dependencies"` to your project map, if you don't
-like the default.
+Put `[record-deps "0.2.0-SNAPSHOT"]` into the `:plugins` vector of
+your project.clj.
 
 Check that it works
 
@@ -43,13 +41,6 @@ Check that it works
  $ cat resources/deps.txt
 ```
 
-Where and what type of file is saved depends on the project map keys
-`:record-deps-edn` and `:record-deps-txt`.  The former specifies the
-pathname of the EDN data and the latter the pathname of the textual
-description.  Whichever you are more comfortable with.  If you don't
-specify anything at all the default is to write a text file
-`resources/deps.txt`.
-
 Add `record-deps` to your `:prep-tasks` like this:
 
 ```clojure
@@ -57,6 +48,18 @@ Add `record-deps` to your `:prep-tasks` like this:
 ```
 
 This creates the dependencies file before performing the compilation.
+
+Where and what type of file is saved depends on the optional keys
+`:edn` and `:txt`.  The former specifies the pathname of the EDN data
+and the latter the pathname of the textual description.  Whichever you
+are more comfortable with.  If you don't specify anything, the default
+is to write the text file `resources/deps.txt`.
+
+To instead create an EDN file you could write
+
+```clojure
+:prep-tasks [["record-deps" :edn "resources/dependencies.edn"] "javac" "compile"]
+```
 
 Test it
 
