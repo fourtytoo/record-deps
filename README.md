@@ -10,13 +10,14 @@ Java resource.
 
 Later you can check the dependencies that formed the final jar as with
 `lein deps :tree` but without the project.  You can, for instance,
-extract the dependencies like this
+look at the dependencies like this
 
 ```console
  $ jar xf path-to-your.jar deps.txt
+ $ cat deps.txt
 ```
 
-or something along the lines.  See below.
+See below for an alternative.
 
 
 ## Install
