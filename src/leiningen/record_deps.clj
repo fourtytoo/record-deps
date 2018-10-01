@@ -24,31 +24,26 @@
      (binding [*out* out#]
        ~@body)))
 
-(defn save-deps [project]
-  (let [{:keys [record-deps-edn record-deps-txt]} project
-        hierarchy (lcp/managed-dependency-hierarchy :dependencies
+(defn record-deps
+  "Write the dependency tree to a file.  Where and what type of file is
+  saved depends on the keys :edn and :txt.  The former specifies the
+  pathname of the EDN data and the latter the pathname of the txt
+  description.  The dependencies are those you would normally get with
+  the command \"lein deps :tree-data\" (for the former) or \"lein
+  deps :tree\" (for the latter)."
+  [project & {:keys [edn txt]}]
+  (let [hierarchy (lcp/managed-dependency-hierarchy :dependencies
                                                     :managed-dependencies
                                                     project)
         ;; by default write at least the text file
-        record-deps-txt (if (or record-deps-txt record-deps-edn)
-                          record-deps-txt
-                          (io/file "resources" "deps.txt"))]
-    (when record-deps-txt
-      (lm/info "Saving project dependencies in" (str record-deps-txt) "as text.")
-      (with-out record-deps-txt
+        txt (if (or txt edn)
+              txt
+              (io/file "resources" "deps.txt"))]
+    (when txt
+      (lm/info "Saving project dependencies in" (str txt) "as text.")
+      (with-out txt
         (walk-deps hierarchy print-dep)))
-    (when record-deps-edn
-      (lm/info "Saving project dependencies in" (str record-deps-edn) "as EDN data.")
-      (with-out record-deps-edn
+    (when edn
+      (lm/info "Saving project dependencies in" (str edn) "as EDN data.")
+      (with-out edn
         (prn hierarchy)))))
-
-(defn record-deps
-  "Write the dependency tree to a file.  Where and what type of file is
-  saved depends on the project map keys :record-deps-edn
-  and :record-deps-txt.  The former specifies the pathname of the EDN
-  data and the latter the pathname of the txt description.  The
-  dependencies are those you would normally get with the command
-  \"lein deps :tree-data\" (for the former) or \"lein
-  deps :tree\" (for the latter)."
-  [project & args]
-  (save-deps project))
