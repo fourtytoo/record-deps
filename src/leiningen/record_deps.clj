@@ -41,9 +41,9 @@
               (io/file "resources" "deps.txt"))]
     (when txt
       (lm/info "Saving project dependencies in" (str txt) "as text.")
-      (with-out txt
+      (with-out (io/file (:root project) txt)
         (walk-deps hierarchy print-dep)))
     (when edn
       (lm/info "Saving project dependencies in" (str edn) "as EDN data.")
-      (with-out edn
+      (with-out (io/file (:root project) edn)
         (prn hierarchy)))))
