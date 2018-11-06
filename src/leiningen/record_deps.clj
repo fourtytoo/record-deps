@@ -76,14 +76,15 @@
       (lm/info "Checking dependency version...")
       (let [old (edn/read-string (slurp (io/file (:root project) edn)))
             [os ns] (compare-dependencies old hierarchy)]
-        (if (or os ns)
+        (if (and (empty? os)
+                 (empty? ns))
+          (lm/info "No dependency version change.")
           (do
             (lm/warn "Dependency version change detected; if this is intended delete"
                      (str edn))
             (run! lm/info os)
             (run! lm/info ns)
-            (System/exit -1))
-          (lm/info "No dependency version change."))))
+            (System/exit -1)))))
     (when txt
       (lm/info "Saving project dependencies in" (str txt) "as text.")
       (with-out (io/file (:root project) txt)
