@@ -67,7 +67,7 @@
               (io/file "resources" "deps.txt"))]
     (when (and check
                (file-exists? edn))
-      (lm/info "Checking dependencies...") ; -wcp06/11/18
+      (lm/info "Checking dependencies...")
       (let [old (edn/read-string (slurp (io/file (:root project) edn)))
             [os ns] (compare-dependencies old hierarchy)]
         (if (or os ns)
