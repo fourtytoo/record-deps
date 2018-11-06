@@ -41,9 +41,15 @@
                        m deps))]
     (fl {} deps)))
 
+(defn common-dependencies [d1 d2]
+  [(select-keys d1 (keys d2))
+   (select-keys d2 (keys d1))])
+
 (defn compare-dependencies [d1 d2]
-  (take 2 (diff (flatten-dependencies d1)
-                (flatten-dependencies d2))))
+  (->> (diff (flatten-dependencies d1)
+             (flatten-dependencies d2))
+       (take 2)
+       (apply common-dependencies)))
 
 (defn record-deps
   "Write the dependency tree to a file.  Where and what type of file is
@@ -67,18 +73,17 @@
               (io/file "resources" "deps.txt"))]
     (when (and check
                (file-exists? edn))
-      (lm/info "Checking dependencies...")
+      (lm/info "Checking dependency version...")
       (let [old (edn/read-string (slurp (io/file (:root project) edn)))
             [os ns] (compare-dependencies old hierarchy)]
         (if (or os ns)
           (do
-            (lm/warn "Dependencies saved in" (str edn)
-                     "differ from current; if this is OK delete"
+            (lm/warn "Dependency version change detected; if this is intended delete"
                      (str edn))
             (run! lm/info os)
             (run! lm/info ns)
             (System/exit -1))
-          (lm/info "Dependencies haven't changed since."))))
+          (lm/info "No dependency version change."))))
     (when txt
       (lm/info "Saving project dependencies in" (str txt) "as text.")
       (with-out (io/file (:root project) txt)
