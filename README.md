@@ -34,7 +34,7 @@ Clone and install locally:
 
 ## Usage
 
-Put `[record-deps "0.2.0-SNAPSHOT"]` into the `:plugins` vector of
+Put `[record-deps "0.3.0-SNAPSHOT"]` into the `:plugins` vector of
 your project.clj.
 
 Check that it works
@@ -73,6 +73,25 @@ Test it
  $ jar tf /usr/home/your_account/some/project.dir/target/your_project-0.1.0-SNAPSHOT.jar | fgrep deps.txt
  deps.txt
  $
+```
+
+
+## Check
+
+Beside saving your dependencies `record-deps` can also check them and
+make sure, for instance, that the version of an old dependency is not
+accidentally changed by a new dependency.
+
+You just need to specify the `:check` option in your prep-tasks
+
+```clojure
+:prep-tasks [["record-deps" :check true] "javac" "compile"]
+```
+
+or, if you want to choose a non-default name for the EDN file:
+
+```clojure
+:prep-tasks [["record-deps" :check "resources/the_dependencies.edn"] "javac" "compile"]
 ```
 
 
