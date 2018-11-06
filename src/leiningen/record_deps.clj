@@ -5,7 +5,9 @@
             [leiningen.core.project :as lp]
             [leiningen.core.classpath :as lcp]
             [clojure.java.io :as io]
-            [clojure.string :as s]))
+            [clojure.string :as s]
+            [clojure.edn :as edn]
+            [clojure.data :refer [diff]]))
 
 (defn- print-dep [dep level]
   (println (str (s/join (repeat level "   "))
@@ -24,6 +26,25 @@
      (binding [*out* out#]
        ~@body)))
 
+(defn file-exists? [file]
+  (.exists (io/as-file file)))
+
+(defn file? [thing]
+  (instance? java.io.File thing))
+
+(defn flatten-dependencies [deps]
+  (letfn [(fl [m deps]
+            (reduce-kv (fn [m [lib version & _] deps]
+                         (if deps
+                           (fl (assoc m lib version) deps)
+                           (assoc m lib version)))
+                       m deps))]
+    (fl {} deps)))
+
+(defn compare-dependencies [d1 d2]
+  (take 2 (diff (flatten-dependencies d1)
+                (flatten-dependencies d2))))
+
 (defn record-deps
   "Write the dependency tree to a file.  Where and what type of file is
   saved depends on the keys :edn and :txt.  The former specifies the
@@ -31,19 +52,40 @@
   description.  The dependencies are those you would normally get with
   the command \"lein deps :tree-data\" (for the former) or \"lein
   deps :tree\" (for the latter)."
-  [project & {:keys [edn txt]}]
+  [project & {:keys [edn txt check] :as options}]
   (let [hierarchy (lcp/managed-dependency-hierarchy :dependencies
                                                     :managed-dependencies
                                                     project)
+        edn (cond (or (file? check)
+                      (string? check)) check
+                  (true? check) (or edn
+                                    (io/file "resources" "deps.edn"))
+                  :else edn)
         ;; by default write at least the text file
         txt (if (or txt edn)
               txt
               (io/file "resources" "deps.txt"))]
+    (when (and check
+               (file-exists? edn))
+      (lm/info "Checking dependencies...") ; -wcp06/11/18
+      (let [old (edn/read-string (slurp (io/file (:root project) edn)))
+            [os ns] (compare-dependencies old hierarchy)]
+        (if (or os ns)
+          (do
+            (lm/warn "Dependencies saved in" (str edn)
+                     "differ from current; if this is OK delete"
+                     (str edn))
+            (run! lm/info os)
+            (run! lm/info ns)
+            (System/exit -1))
+          (lm/info "Dependencies haven't changed since."))))
     (when txt
       (lm/info "Saving project dependencies in" (str txt) "as text.")
       (with-out (io/file (:root project) txt)
         (walk-deps hierarchy print-dep)))
-    (when edn
+    (when (and edn
+               (or (not check)
+                   (not (file-exists? edn))))
       (lm/info "Saving project dependencies in" (str edn) "as EDN data.")
       (with-out (io/file (:root project) edn)
         (prn hierarchy)))))
