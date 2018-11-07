@@ -75,14 +75,13 @@
               (io/file "resources" "deps.txt"))]
     (when (and check
                (file-exists? edn))
-      (lm/info "Checking dependency version...")
       (let [old (edn/read-string (slurp (io/file (:root project) edn)))
             [os ns] (compare-dependencies old hierarchy)]
         (if (and (empty? os)
                  (empty? ns))
-          (lm/info "No dependency version change.")
+          (lm/info "No dependency version change detected.")
           (do
-            (lm/warn "Dependency version change detected; if this is intended delete"
+            (lm/warn "Dependency version change detected; if this is intended, delete"
                      (str edn))
             (lm/info "old:")
             (run! (partial lm/info "   ") os)

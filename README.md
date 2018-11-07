@@ -98,7 +98,6 @@ The compilation would then look like
 
 ```console
  $ lein compile
- Checking dependency version...
  No dependency version change.
  Compiling [...]
 ```
@@ -107,7 +106,6 @@ or like
 
 ```console
  $ lein compile
- Checking dependency version...
  Dependency version change detected; if this is intended delete resources/deps.edn
  old:
      [io.netty/netty 3.10.6.Final]
