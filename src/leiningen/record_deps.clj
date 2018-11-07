@@ -57,7 +57,9 @@
   pathname of the EDN data and the latter the pathname of the txt
   description.  The dependencies are those you would normally get with
   the command \"lein deps :tree-data\" (for the former) or \"lein
-  deps :tree\" (for the latter)."
+  deps :tree\" (for the latter). The :check option (with or without a
+  pathname) is instead to check whether the dependencies have changed
+  since last time the EDN file was saved."
   [project & {:keys [edn txt check] :as options}]
   (let [hierarchy (lcp/managed-dependency-hierarchy :dependencies
                                                     :managed-dependencies
