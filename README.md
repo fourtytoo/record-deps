@@ -34,7 +34,7 @@ Clone and install locally:
 
 ## Usage
 
-Put `[record-deps "0.3.0-SNAPSHOT"]` into the `:plugins` vector of
+Put `[record-deps "0.3.2-SNAPSHOT"]` into the `:plugins` vector of
 your project.clj.
 
 Check that it works
