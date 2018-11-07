@@ -82,8 +82,10 @@
           (do
             (lm/warn "Dependency version change detected; if this is intended delete"
                      (str edn))
-            (run! lm/info os)
-            (run! lm/info ns)
+            (lm/info "old:")
+            (run! (partial lm/info "   ") os)
+            (lm/info "new:")
+            (run! (partial lm/info "   ") ns)
             (System/exit -1)))))
     (when txt
       (lm/info "Saving project dependencies in" (str txt) "as text.")
