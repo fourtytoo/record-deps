@@ -143,7 +143,7 @@ and then from the command line you can simply
 
 ## License
 
-Copyright © 2018 Walter C. Pelissero <walter@pelissero.de>
+Copyright © 2018 Walter C. Pelissero
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
